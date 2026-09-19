@@ -7,13 +7,13 @@ using Academy.Models;
 
 namespace Academy.Data
 {
-    public class AcademyContext : DbContext
-    {
-        public AcademyContext (DbContextOptions<AcademyContext> options)
-            : base(options)
-        {
-        }
+	public class AcademyContext : DbContext
+	{
+		public AcademyContext(DbContextOptions<AcademyContext> options)
+			: base(options)
+		{
+		}
 
-        public DbSet<Academy.Models.Direction> Directions { get; set; } = default!;
-    }
+		public DbSet<Academy.Models.Direction> Directions { get; set; } = default!;
+	}
 }

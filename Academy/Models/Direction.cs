@@ -6,8 +6,8 @@ namespace Academy.Models
 	public class Direction
 	{
 		[Key]
-		[Column (TypeName="TINYINT")]
-		public byte direction_id {  get; set; }
+		[Column(TypeName = "TINYINT")]
+		public int direction_id { get; set; }
 		public string direction_name { get; set; }
 	}
 }
