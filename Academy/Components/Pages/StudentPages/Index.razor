@@ -15,49 +15,45 @@
 	<p>
 		<a href="students/create" class="btn btn-primary">Добавить</a>
 	</p>
+	<div>
+		<label for="items-per-page">Items per page:</label>
+		<select @bind="pagination.ItemsPerPage" id="items-per-page">
+			<option value="3">3</option>
+			<option value="5">5</option>
+			<option value="8">8</option>
+			<option value="10">10</option>
+		</select>
+	</div>
 </div>
 
-<QuickGrid Class="table" Items="context.Students.Include(s => s.Group).ThenInclude(g => g.Direction)">
-	@* <PropertyColumn Property="student => student.last_name" />
-	<PropertyColumn Property="student => student.first_name" />
-	<PropertyColumn Property="student => student.middle_name" /> *@
-	<TemplateColumn Context="student"
-					Title="Student"
-					Sortable="true"
-					SortBy="sortBy"
-					>
-		<a href="@($"students/details?stud_id={student.stud_id}")">@student.FullName</a>
-	</TemplateColumn>
-	@* <PropertyColumn Property="student => student.FullName" Sortable="true" /> *@
-	<PropertyColumn Property="student => student.birth_date" Sortable="true" />
-	<TemplateColumn Context="student"
-					Title="Age"
-					Sortable="true"
-					SortBy="GridSort<Student>.ByDescending(s => s.birth_date)"
-					>
-					@student.Age
-	</TemplateColumn>
-	<PropertyColumn Property="student => student.Group.group_name" Sortable="true" />
-	<PropertyColumn Property="student => student.Group.Direction.direction_name" Sortable="true" />
-	@* <PropertyColumn Property="student => student.email" />
-	<PropertyColumn Property="student => student.phone" />
-	<PropertyColumn Property="student => student.photo" /> *@
-
-	@* <TemplateColumn Context="student">
-		<a href="@($"students/edit?stud_id={student.stud_id}")">Edit</a> |
-		<a href="@($"students/details?stud_id={student.stud_id}")">Details</a> |
-		<a href="@($"students/delete?stud_id={student.stud_id}")">Delete</a>
-	</TemplateColumn> *@
-</QuickGrid>
+<div>
+	<div class="grid-container">
+		<QuickGrid Class="table" Items="context.Students.Include(s => s.Group).ThenInclude(g => g.Direction)" Pagination="pagination">
+			<TemplateColumn Context="student"
+							Title="Student"
+							Sortable="true"
+							SortBy="sortBy">
+				<a href="@($"students/details?stud_id={student.stud_id}")">@student.FullName</a>
+			</TemplateColumn>
+			<PropertyColumn Property="student => student.birth_date" Sortable="true" />
+			<TemplateColumn Context="student"
+							Title="Age"
+							Sortable="true"
+							SortBy="GridSort<Student>.ByDescending(s => s.birth_date)">
+				@student.Age
+			</TemplateColumn>
+			<PropertyColumn Property="student => student.Group.group_name" Sortable="true" />
+			<PropertyColumn Property="student => student.Group.Direction.direction_name" Sortable="true" />
+		</QuickGrid>
+	</div>
+	<Paginator State="pagination" />
+</div>
 
 @code {
 	private AcademyContext context = default!;
+	PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
 	IQueryable<Student> students = default!;
-	GridSort<Student> sortBy = GridSort<Student>.ByAscending(s => s.last_name)
-												//.ThenAscending(s => s.first_name)
-												;
-												//ASC  - Ascending	(в порядке возрастания)
-												//DESC - Descending (в порядке убывания)
+	GridSort<Student> sortBy = GridSort<Student>.ByAscending(s => s.last_name);
 	protected override void OnInitialized()
 	{
 		context = DbFactory.CreateDbContext();
